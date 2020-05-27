@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Instant news</string>
+    <string name="for_you">For you</string>
+    <string name="headlines">Headlines</string>
+    <string name="following">Following</string>
+    <string name="newsstand">Newsstand</string>
+    <string name="demo_headline">Indian Army dismisses reports claiming detention of its soldiers by Chinese forces. Indian Army dismisses reports claiming detention of its soldiers by Chinese forces.  </string>
+    <string name="_48_minutes_ago">48 minutes ago</string>
+    <string name="search">Search</string>
+    <string name="submit">submit</string>
+    <string name="the_times_of_india">The Times Of India</string>
+</resources>
