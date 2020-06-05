@@ -2,6 +2,7 @@ package com.myapplication.headlines
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -25,13 +26,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var url = "https://newsapi.org/v2/top-headlines?country=in&pageSize=100&apiKey=83b8d04f4a444519ae239af5327c9bca"
+        var url =
+            "https://newsapi.org/v2/top-headlines?country=in&pageSize=100&apiKey=83b8d04f4a444519ae239af5327c9bca"
         //dusri Activity se data lene ke liye (intent.extras)
-        intent.extras?.let{
-            val clickedId =   it.getString("clickedId")
-            url = "https://newsapi.org/v2/top-headlines?sources=$clickedId&pageSize=100&apiKey=83b8d04f4a444519ae239af5327c9bca"
+        intent.extras?.let {
+            val clickedId = it.getString("clickedId")
+            clickedId?.let { source ->
+                url =
+                    "https://newsapi.org/v2/top-headlines?sources=$source&pageSize=100&apiKey=83b8d04f4a444519ae239af5327c9bca"
+                fab.visibility = View.GONE
+            }
 
-            fab.visibility = View.GONE
         }
 
         fetchNews(url)
@@ -39,18 +44,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchNews(url: String) {
         // Get a RequestQueue
+        Log.d("VolleyResponse", "fetchNews url $url")
         val listNews: ArrayList<NewsModel> = ArrayList()
         val stringRequest =
             StringRequest(GET, url, Response.Listener {
-
-                //Log.d("VolleyResponse", it)
                 val jsonObj = JSONObject(it)
+
+                Log.d("VolleyResponse", it)
                 val articlesArray = jsonObj.getJSONArray("articles")
                 for (i in 0 until articlesArray.length()) {
                     val article = articlesArray[i] as JSONObject
                     val title = article.getString("title")
                     val urlToImage = article.getString("urlToImage")
-                    val publishedAt = article.getString("publishedAt").replace("T"," ").replace("Z"," ")
+                    val publishedAt =
+                        article.getString("publishedAt").replace("T", " ").replace("Z", " ")
                     val sources = article.getJSONObject("source")
                     val name = sources.getString("name")
                     val newsModel = NewsModel(
@@ -67,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 recycler_news.adapter = newsRecyclerAdapter
 
             }, Response.ErrorListener {
-
+                Log.d("VolleyResponse", "it $it")
             })
 
         // Add a request (in this example, called stringRequest) to your RequestQueue.
@@ -81,7 +88,8 @@ class MainActivity : AppCompatActivity() {
         val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                val url = "https://newsapi.org/v2/everything?q=$query&pageSize=100&apiKey=83b8d04f4a444519ae239af5327c9bca"
+                val url =
+                    "https://newsapi.org/v2/everything?q=$query&pageSize=100&apiKey=83b8d04f4a444519ae239af5327c9bca"
                 fetchNews(url)
 
                 return false
@@ -96,8 +104,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onNewsListClick(view: View) {
-        val intent = Intent(this,
-            NewsPaperListActivity::class.java)
+        val intent = Intent(
+            this,
+            NewsPaperListActivity::class.java
+        )
         startActivity(intent)
 
     }
