@@ -17,7 +17,7 @@ class NewsPaperListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_paper_list)
 
-        supportActionBar!!.title = "News Paper List"
+//        supportActionBar!!.title = "News Paper List"
 
         val url = "https://newsapi.org/v2/sources?&size=100&apiKey=83b8d04f4a444519ae239af5327c9bca"
         fetchNews(url)
